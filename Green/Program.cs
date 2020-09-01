@@ -110,8 +110,30 @@ namespace Green
             {
                 Console.WriteLine(row);
             }
+
+
+
+
             Console.SetCursorPosition(2, 3);
             Console.Write("@");
+
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            if (keyInfo.Key == ConsoleKey.LeftArrow)
+            {
+                Console.WriteLine("left");
+            }
+            else if (keyInfo.Key == ConsoleKey.RightArrow)
+            {
+                Console.WriteLine("right");
+            }
+            else if (keyInfo.Key == ConsoleKey.UpArrow)
+            {
+                Console.WriteLine("up");
+            }
+            else if (keyInfo.Key == ConsoleKey.DownArrow)
+            {
+                Console.WriteLine("down");
+            }
 
             Console.SetCursorPosition(0, level.Length);
         }
