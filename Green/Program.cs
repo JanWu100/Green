@@ -105,6 +105,11 @@ namespace Green
             // while (lineIndex < scroll.Length) {
             //   Console.WriteLine(scroll[lineIndex++]);
             // }
+            Console.Clear();
+            foreach (string row in level)
+            {
+                Console.WriteLine(row);
+            }
         }
     }
 }
