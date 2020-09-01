@@ -110,6 +110,10 @@ namespace Green
             {
                 Console.WriteLine(row);
             }
+            Console.SetCursorPosition(2, 3);
+            Console.Write("@");
+
+            Console.SetCursorPosition(0, level.Length);
         }
     }
 }
