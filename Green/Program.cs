@@ -29,23 +29,60 @@ namespace Green
             Console.WriteLine($"Welcome to Green, {name} from {place}!");
             Console.WriteLine("Press any key to continue");
             Console.ReadKey(true);
+            //string[] level = {
+            //  "##########",
+            //  "#     #  #",
+            //  "#    ##  #",
+            //  "#     #  #",
+            //  "#        #",
+            //  "#     #   ",
+            //  "##########"
+
+            //};
             string[] level = {
-              "##########",
-              "#     #  #",
-              "#    ##  #",
-              "#     #  #",
-              "#        #",
-              "#     #  #",
-              "##########"
+            "888888888888888888888888888888888888888888888888888888888888888888888   8",
+            "8   8               8               8           8                   8   8",
+            "8   8   888888888   8   88888   888888888   88888   88888   88888   8   8",
+            "8               8       8   8           8           8   8   8       8   8",
+            "888888888   8   888888888   888888888   88888   8   8   8   888888888   8",
+            "8       8   8               8           8   8   8   8   8           8   8",
+            "8   8   8888888888888   8   8   888888888   88888   8   888888888   8   8",
+            "8   8               8   8   8       8           8           8       8   8",
+            "8   8888888888888   88888   88888   8   88888   888888888   8   88888   8",
+            "8           8       8   8       8   8       8           8   8           8",
+            "8   88888   88888   8   88888   8   888888888   8   8   8   8888888888888",
+            "8       8       8   8   8       8       8       8   8   8       8       8",
+            "8888888888888   8   8   8   888888888   8   88888   8   88888   88888   8",
+            "8           8   8           8       8   8       8   8       8           8",
+            "8   88888   8   888888888   88888   8   88888   88888   8888888888888   8",
+            "8   8       8           8           8       8   8   8               8   8",
+            "8   8   888888888   8   88888   888888888   8   8   8888888888888   8   8",
+            "8   8           8   8   8   8   8           8               8   8       8",
+            "8   888888888   8   8   8   88888   888888888   888888888   8   888888888",
+            "8   8       8   8   8           8           8   8       8               8",
+            "8   8   88888   88888   88888   888888888   88888   a   888888888   8   8",
+            "8   8                   8           8               8               8   8",
+            "8   888888888888888888888888888888888888888888888888888888888888888888888"
 
             };
-                    string[] scroll = {
-            "    ____________________",
-            "  =(__   ___     __    _)=",
-            "    |                  |",
-            "    |__   ___  __   ___|   ",
-            "   =(____________________)="
+            string[] scroll = {
+            "    ___________________________________________________________________________________",
+            "  =(__   ___     __   ___     __   ___     __   ___     __   ___     __   ___     _____)=",
+            "    |                                                                                 |    ",
+            "    |__   ___  __   ___     __   ___     __   ___     __   ___     __   ___   __    __|    ",
+            "   =(___________________________________________________________________________________)=  "
             };
+            string[] congrats = { @"                                 _       
+                                | |      
+  ___ ___  _ __   __ _ _ __ __ _| |_ ___ 
+ / __/ _ \| '_ \ / _` | '__/ _` | __/ __|
+| (_| (_) | | | | (_| | | | (_| | |_\__ \
+ \___\___/|_| |_|\__, |_|  \__,_|\__|___/
+                  __/ |                  
+                 |___/      " };
+
+
+
             Console.Clear();
             Console.WriteLine($"Wanna see the map {name}? Press any key untill it is revealed...");
 
@@ -76,8 +113,9 @@ namespace Green
             }
 
             int playerColumn = 2;
-            int playerRow = 3;
-
+            int playerRow = level.Length-2;
+            Console.WriteLine();
+            Console.WriteLine($"Press Enter to reset Avatar to starting position, or press \"g\" to give up {name}");
             while (true)
             {
                 Console.SetCursorPosition(playerColumn, playerRow);
@@ -97,39 +135,63 @@ namespace Green
                 int targetColumn = playerColumn;
                 int targetRow = playerRow;
 
-                if (keyInfo.Key == ConsoleKey.LeftArrow && currentRow[playerColumn-1] != '#')
+                if (keyInfo.Key == ConsoleKey.LeftArrow && currentRow[playerColumn-1] != '8')
                 {
                     targetColumn = playerColumn-1;
                 }
-                else if (keyInfo.Key == ConsoleKey.RightArrow && currentRow[playerColumn+1] != '#')
+                else if (keyInfo.Key == ConsoleKey.RightArrow && currentRow[playerColumn+1] != '8')
                 {
                     targetColumn = playerColumn+1;
                 }
-                else if (keyInfo.Key == ConsoleKey.UpArrow && currentRowUp[playerColumn] != '#')
+                else if (keyInfo.Key == ConsoleKey.UpArrow && currentRowUp[playerColumn] != '8')
                 {
                     targetRow = playerRow-1;
                 }
-                else if (keyInfo.Key == ConsoleKey.DownArrow && currentRowDown[playerColumn] != '#')
+                else if (keyInfo.Key == ConsoleKey.DownArrow && currentRowDown[playerColumn] != '8')
                 {
                     targetRow = playerRow+1;
                 }
                 // Resetting position
+                else if (keyInfo.Key == ConsoleKey.G)
+                {
+                    //targetColumn = 2;
+                    //targetRow = level.Length - 2;
+                    targetColumn = level[playerRow].Length - 3;
+                    targetRow = 2;
+                }
                 else if (keyInfo.Key == ConsoleKey.Enter)
                 {
                     targetColumn = 2;
-                    targetRow = 3;
+                    targetRow = level.Length - 2;
                 }
 
                 if (targetColumn >= 0 && targetColumn < level[playerRow].Length)
                 {
                     playerColumn = targetColumn;
                 }
-                if (targetRow >= 0 && targetRow < level.Length)
+                if (targetRow >= 0 && targetRow < level.Length-1)
                 {
                     playerRow = targetRow;
                 }
+
+            //You Win
+                //if (playerRow == level.Length-2 && playerColumn == level[playerRow].Length - 1)
+                if (playerRow == 0 && playerColumn >= level[playerRow].Length - 4 && playerColumn <= level[playerRow].Length - 1)
+                {
+                    break;
+                }
+                
+
             }
-            Console.SetCursorPosition(0, level.Length);
+            Console.Clear();
+            Console.WriteLine();
+            foreach (string row in congrats)
+            {
+                Console.WriteLine(row);
+            }
+            Console.WriteLine();
+                Console.WriteLine($"    Congratulations {name}, You won!");
+            Console.SetCursorPosition(0, 15);
         }
     }
 }
