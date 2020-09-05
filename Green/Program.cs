@@ -86,6 +86,10 @@ namespace Green
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.SetCursorPosition(playerColumn, playerRow);
                 string currentRow = level[playerRow];
+                string currentRowUp = level[playerRow-1];
+                string currentRowDown = level[playerRow + 1];
+
+
                 char currentCell = currentRow[playerColumn];
                 
 
@@ -101,11 +105,11 @@ namespace Green
                 {
                     targetColumn = playerColumn+1;
                 }
-                else if (keyInfo.Key == ConsoleKey.UpArrow && currentRow[playerColumn] != '#')
+                else if (keyInfo.Key == ConsoleKey.UpArrow && currentRowUp[playerColumn] != '#')
                 {
                     targetRow = playerRow-1;
                 }
-                else if (keyInfo.Key == ConsoleKey.DownArrow && currentRow[playerColumn] != '#')
+                else if (keyInfo.Key == ConsoleKey.DownArrow && currentRowDown[playerColumn] != '#')
                 {
                     targetRow = playerRow+1;
                 }
