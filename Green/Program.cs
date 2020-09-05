@@ -192,6 +192,8 @@ namespace Green
             Console.WriteLine();
                 Console.WriteLine($"    Congratulations {name}, You won!");
             Console.SetCursorPosition(0, 15);
+            Console.WriteLine("Press Enter twice, to close the program");
+            Console.ReadLine();
         }
     }
 }
