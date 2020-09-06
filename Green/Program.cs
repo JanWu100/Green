@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Green
 {
@@ -7,17 +8,17 @@ namespace Green
         static void Main(string[] args)
         {
             // Player creation
-            Console.WriteLine("What is your name, Cupcake?");
+            Console.WriteLine("What is your name, Friend?");
             string name = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(name))
             {
-                Console.WriteLine("I will still call you Cupcake, then.");
-                name = "Cupcake";
+                Console.WriteLine("I will still call you Friend, then.");
+                name = "Friend";
             }
-            else if (name.ToLower() == "cupcake")
+            else if (name.ToLower() == "friend")
             {
                 Console.WriteLine("Ha! I knew it.");
-                name = "Cupcake";
+                name = "Friend";
             }
             Console.WriteLine("Where are you from, " + name + "?");
             string place = Console.ReadLine();
@@ -65,12 +66,33 @@ namespace Green
             "8   888888888888888888888888888888888888888888888888888888888888888888888"
 
             };
-            string[] scroll = {
-            "    ___________________________________________________________________________________",
-            "  =(__   ___     __   ___     __   ___     __   ___     __   ___     __   ___     _____)=",
-            "    |                                                                                 |    ",
-            "    |__   ___  __   ___     __   ___     __   ___     __   ___     __   ___   __    __|    ",
-            "   =(___________________________________________________________________________________)=  "
+            //string[] scroll = {
+            //"    ___________________________________________________________________________________",
+            //"  =(__   ___     __   ___     __   ___     __   ___     __   ___     __   ___     _____)=",
+            //"    |                                                                                 |    ",
+            //"    |__   ___  __   ___     __   ___     __   ___     __   ___     __   ___   __    __|    ",
+            //"   =(___________________________________________________________________________________)=  "
+            //};
+            //string[] scroll = {
+            //"    __________________________________________________________________________________",
+            //"  =(__   ___     __   ___     __   ___     __   ___     __   ___     __   ___     ____",
+            //"    |                                                                                 ",
+            //"    |__   ___  __   ___     __   ___     __   ___     __   ___     __   ___   __    __",
+            //"  =(__________________________________________________________________________________"
+            //};
+            string[] scrollStart = {
+            "    _",
+            "  =(_",
+            "    |",
+            "    |",
+            "  =(_"
+            };
+            string[] scrollEnd = {
+            "_",
+            "_)=",
+            "|    ",
+            "|    ",
+            "_)=  "
             };
             string[] congrats = { @"                                 _       
                                 | |      
@@ -81,14 +103,23 @@ namespace Green
                   __/ |                  
                  |___/      " };
 
+            string[] scrollMiddle = 
+                {   "________________________________________________________________________________________________",
+                    "____       _________       __________       _______       ___________       ______        ______",
+                    "                                                                                                ",
+                    "__________       _______        __________       _______       _________       ______      _____",
+                    "________________________________________________________________________________________________"};
 
-
+            //Map reaveal
             Console.Clear();
             Console.WriteLine($"Wanna see the map {name}? Press any key untill it is revealed...");
 
-            for (int index = 0; index < scroll.Length / 2 + 1; index++)
+            int scrollLength = level[0].Length+8;
+            
+
+            for (int index = 0; index < scrollStart.Length / 2 + 1; index++)
             {
-                Console.WriteLine(scroll[index]);
+                Console.WriteLine(scrollStart[index]+ scrollMiddle[index].Substring(0, scrollLength) + scrollEnd[index]);
             }
           
             int nextMapRowPosition = Console.CursorTop;
@@ -96,9 +127,9 @@ namespace Green
             {
                 Console.SetCursorPosition(0, nextMapRowPosition);
                 Console.WriteLine($"    |    {row}    |");
-                for (int index = scroll.Length / 2 + 1; index < scroll.Length; index++)
+                for (int index = scrollStart.Length / 2 + 1; index < scrollStart.Length; index++)
                 {
-                    Console.WriteLine(scroll[index]);
+                    Console.WriteLine(scrollStart[index] +scrollMiddle[index].Substring(0,scrollLength) + scrollEnd[index]);
                 }
                 nextMapRowPosition++;
                 Console.ReadKey(true);
@@ -115,7 +146,7 @@ namespace Green
             int playerColumn = 2;
             int playerRow = level.Length-2;
             Console.WriteLine();
-            Console.WriteLine($"Press Enter to reset Avatar to starting position, or press \"g\" to give up {name}");
+            Console.WriteLine($"If struggling, press Enter to reset Avatar to starting position, or press \"g\" to give up, {name}.");
             while (true)
             {
                 Console.SetCursorPosition(playerColumn, playerRow);
