@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Green
 {
@@ -89,13 +90,6 @@ namespace Green
                   __/ |                  
                  |___/      " };
 
-            string[] scrollMiddle = 
-                {   "________________________________________________________________________________________________",
-                    "____       _________       __________       _______       ___________       ______        ______",
-                    "                                                                                                ",
-                    "__________       _______        __________       _______       _________       ______      _____",
-                    "________________________________________________________________________________________________"};
-
             //Map reaveal
             Console.Clear();
             Console.WriteLine($"Wanna see the map {name}? Press any key untill it is revealed...");
@@ -105,7 +99,7 @@ namespace Green
 
             for (int index = 0; index < scrollStart.Length / 2 + 1; index++)
             {
-                Console.WriteLine(scrollStart[index]+ scrollMiddle[index].Substring(0, scrollLength) + scrollEnd[index]);
+                Console.WriteLine(scrollStart[index]+ ScrollDimensions(level)[index] + scrollEnd[index]);
             }
           
             int nextMapRowPosition = Console.CursorTop;
@@ -115,7 +109,7 @@ namespace Green
                 Console.WriteLine($"    |    {row}    |");
                 for (int index = scrollStart.Length / 2 + 1; index < scrollStart.Length; index++)
                 {
-                    Console.WriteLine(scrollStart[index] +scrollMiddle[index].Substring(0,scrollLength) + scrollEnd[index]);
+                    Console.WriteLine(scrollStart[index] + ScrollDimensions(level)[index] + scrollEnd[index]);
                 }
                 nextMapRowPosition++;
                 Console.ReadKey(true);
@@ -123,7 +117,7 @@ namespace Green
 
             Console.Clear();
 
-
+            //scrollMiddle[index].Substring(0,scrollLength)
             foreach (string row in level)
             {
                 Console.WriteLine(row);
@@ -211,6 +205,76 @@ namespace Green
             Console.SetCursorPosition(0, 15);
             Console.WriteLine("Press Enter twice, to close the program");
             Console.ReadLine();
+        }
+        public static string[] ScrollDimensions(string[] level)
+        {
+            var n = 0;
+            if (level[0].Length < 30)
+            {
+                n += 3;
+            }
+            else n += 9;
+
+            var scroll1 = "";
+            for (int i = 0; i < level[0].Length + 8; i++)
+            {
+                scroll1 += "_";
+            }
+
+            var scroll2 = "";
+            for (int i = 0; i < level[0].Length + 8; i++)
+            {
+                if (i >= 0 && i <= n
+                    || i >= 2 * n && i <= 3 * n
+                    || i >= 4 * n && i <= 5 * n
+                    || i >= 6 * n && i <= 7 * n
+                    || i >= 8 * n && i <= 9 * n
+                    || i >= 10 * n && i <= 11 * n
+                    || i >= (level[0].Length)+5 && i <=(level[0].Length+8))
+                {
+                    scroll2 += "_";
+                }
+                else
+                {
+                    scroll2 += " ";
+                }
+            }
+
+            var scroll3 = "";
+            for (int i = 0; i < level[0].Length + 8; i++)
+            {
+                scroll3 += " ";
+            }
+
+            var scroll4 = "";
+            for (int i = 0; i < level[0].Length + 8; i++)
+            {
+                //var n = 7;
+                if (i >= (level[0].Length) + 5 && i <= (level[0].Length)+8)
+                {
+                    scroll4 += "_";
+                }
+                else if ( i >= 2 * n && i <= 3 * n
+                    || i >= 4 * n && i <= 5 * n
+                    || i >= 6 * n && i <= 7 * n
+                    || i >= 8 * n && i <= 9 * n
+                    || i >= 10 * n && i <= 11 * n)
+                {
+                    scroll4 += " ";
+                }
+                else
+                {
+                    scroll4 += "_";
+                }
+            }
+
+            var scroll5 = "";
+            for (int i = 0; i < level[0].Length + 8; i++)
+            {
+                scroll5 += "_";
+            }
+            var scrollMiddle = new string[] { scroll1, scroll2, scroll3, scroll4, scroll5 };
+            return scrollMiddle;
         }
     }
 }
