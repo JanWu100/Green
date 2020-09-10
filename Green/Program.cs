@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -9,6 +10,7 @@ namespace Green
         static void Main(string[] args)
         {
             // Player creation
+            
             Console.WriteLine("What is your name, Friend?");
             string name = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(name))
@@ -41,32 +43,7 @@ namespace Green
             //  "##########"
 
             //};
-            string[] level = {
-            "888888888888888888888888888888888888888888888888888888888888888888888   8",
-            "8   8               8               8           8                   8   8",
-            "8   8   888888888   8   88888   888888888   88888   88888   88888   8   8",
-            "8               8       8   8           8           8   8   8       8   8",
-            "888888888   8   888888888   888888888   88888   8   8   8   888888888   8",
-            "8       8   8               8           8   8   8   8   8           8   8",
-            "8   8   8888888888888   8   8   888888888   88888   8   888888888   8   8",
-            "8   8               8   8   8       8           8           8       8   8",
-            "8   8888888888888   88888   88888   8   88888   888888888   8   88888   8",
-            "8           8       8   8       8   8       8           8   8           8",
-            "8   88888   88888   8   88888   8   888888888   8   8   8   8888888888888",
-            "8       8       8   8   8       8       8       8   8   8       8       8",
-            "8888888888888   8   8   8   888888888   8   88888   8   88888   88888   8",
-            "8           8   8           8       8   8       8   8       8           8",
-            "8   88888   8   888888888   88888   8   88888   88888   8888888888888   8",
-            "8   8       8           8           8       8   8   8               8   8",
-            "8   8   888888888   8   88888   888888888   8   8   8888888888888   8   8",
-            "8   8           8   8   8   8   8           8               8   8       8",
-            "8   888888888   8   8   8   88888   888888888   888888888   8   888888888",
-            "8   8       8   8   8           8           8   8       8               8",
-            "8   8   88888   88888   88888   888888888   88888   a   888888888   8   8",
-            "8   8                   8           8               8               8   8",
-            "8   888888888888888888888888888888888888888888888888888888888888888888888"
 
-            };
             string[] scrollStart = {
             "    _",
             "  =(_",
@@ -81,62 +58,57 @@ namespace Green
             "|    ",
             "_)=  "
             };
-            string[] congrats = { @"                                 _       
-                                | |      
-  ___ ___  _ __   __ _ _ __ __ _| |_ ___ 
- / __/ _ \| '_ \ / _` | '__/ _` | __/ __|
-| (_| (_) | | | | (_| | | | (_| | |_\__ \
- \___\___/|_| |_|\__, |_|  \__,_|\__|___/
-                  __/ |                  
-                 |___/      " };
+
+            var currentLevel = 1;
 
             //Map reaveal
             Console.Clear();
             Console.WriteLine($"Wanna see the map {name}? Press any key untill it is revealed...");
 
-            int scrollLength = level[0].Length+8;
             
-
+            
             for (int index = 0; index < scrollStart.Length / 2 + 1; index++)
             {
-                Console.WriteLine(scrollStart[index]+ ScrollDimensions(level)[index] + scrollEnd[index]);
+                Console.WriteLine(scrollStart[index]+ DrawScrollBody(DrawLevel(currentLevel))[index] + scrollEnd[index]);
             }
           
             int nextMapRowPosition = Console.CursorTop;
-            foreach (string row in level)
+            foreach (string row in DrawLevel(currentLevel))
             {
                 Console.SetCursorPosition(0, nextMapRowPosition);
                 Console.WriteLine($"    |    {row}    |");
                 for (int index = scrollStart.Length / 2 + 1; index < scrollStart.Length; index++)
                 {
-                    Console.WriteLine(scrollStart[index] + ScrollDimensions(level)[index] + scrollEnd[index]);
+                    Console.WriteLine(scrollStart[index] + DrawScrollBody(DrawLevel(currentLevel))[index] + scrollEnd[index]);
                 }
                 nextMapRowPosition++;
                 Console.ReadKey(true);
             }
-
             Console.Clear();
 
-            //scrollMiddle[index].Substring(0,scrollLength)
-            foreach (string row in level)
+            foreach (string row in DrawLevel(currentLevel))
             {
                 Console.WriteLine(row);
             }
 
             int playerColumn = 2;
-            int playerRow = level.Length-2;
+            int playerRow = DrawLevel(currentLevel).Length-2;
             Console.WriteLine();
             Console.WriteLine($"If struggling, press Enter to reset Avatar to starting position, or press \"g\" to give up, {name}.");
             while (true)
             {
+                if (currentLevel > 3)
+                {
+                    break;
+                }
                 Console.SetCursorPosition(playerColumn, playerRow);
                 Console.Write("@");
               
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.SetCursorPosition(playerColumn, playerRow);
-                string currentRow = level[playerRow];
-                string currentRowUp = level[playerRow-1];
-                string currentRowDown = level[playerRow + 1];
+                string currentRow = DrawLevel(currentLevel)[playerRow];
+                string currentRowUp = DrawLevel(currentLevel)[playerRow-1];
+                string currentRowDown = DrawLevel(currentLevel)[playerRow + 1];
 
 
                 char currentCell = currentRow[playerColumn];
@@ -167,53 +139,266 @@ namespace Green
                 {
                     //targetColumn = 2;
                     //targetRow = level.Length - 2;
-                    targetColumn = level[playerRow].Length - 3;
+                    targetColumn = DrawLevel(currentLevel)[playerRow].Length - 3;
                     targetRow = 2;
                 }
                 else if (keyInfo.Key == ConsoleKey.Enter)
                 {
                     targetColumn = 2;
-                    targetRow = level.Length - 2;
+                    targetRow = DrawLevel(currentLevel).Length - 2;
                 }
 
-                if (targetColumn >= 0 && targetColumn < level[playerRow].Length)
+                if (targetColumn >= 0 && targetColumn < DrawLevel(currentLevel)[playerRow].Length)
                 {
                     playerColumn = targetColumn;
                 }
-                if (targetRow >= 0 && targetRow < level.Length-1)
+                if (targetRow >= 0 && targetRow < DrawLevel(currentLevel).Length-1)
                 {
                     playerRow = targetRow;
                 }
 
-            //You Win
-                //if (playerRow == level.Length-2 && playerColumn == level[playerRow].Length - 1)
-                if (playerRow == 0 && playerColumn >= level[playerRow].Length - 4 && playerColumn <= level[playerRow].Length - 1)
+                if (LevelCompleted(playerRow,playerColumn, DrawLevel(currentLevel)))
                 {
-                    break;
+                    Console.Clear();
+                    Console.WriteLine();
+
+                    foreach (string row in DrawCongratulations(1))
+                    {
+                        Console.WriteLine(row);
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine($"Congratulations {name}, You finished this level!");
+                    Console.SetCursorPosition(0, 15);
+                    Console.WriteLine("Press Enter to advance to another level");
+                    Console.ReadLine();
+                    Console.Clear();
+                    currentLevel++;
+                    if (currentLevel > 3)
+                    {
+                        break;
+
+                    }
+                    Console.WriteLine($"Wanna see the map {name}? Press any key untill it is revealed...");
+                    for (int index = 0; index < scrollStart.Length / 2 + 1; index++)
+                    {
+                        Console.WriteLine(scrollStart[index] + DrawScrollBody(DrawLevel(currentLevel))[index] + scrollEnd[index]);
+                    }
+
+                    int nextMapRowPosition2 = Console.CursorTop;
+                    foreach (string row in DrawLevel(currentLevel))
+                    {
+                        Console.SetCursorPosition(0, nextMapRowPosition2);
+                        Console.WriteLine($"    |    {row}    |");
+                        for (int index = scrollStart.Length / 2 + 1; index < scrollStart.Length; index++)
+                        {
+                            Console.WriteLine(scrollStart[index] + DrawScrollBody(DrawLevel(currentLevel))[index] + scrollEnd[index]);
+                        }
+                        nextMapRowPosition2++;
+                        Console.ReadKey(true);
+                    }
+                    Console.Clear();
+
+                    
+                    foreach (string row in DrawLevel(currentLevel))
+                    {
+                        Console.WriteLine(row);
+                    }
+                    playerColumn = 2;
+                    playerRow = DrawLevel(currentLevel).Length - 2;
+                    Console.WriteLine();
+                    Console.WriteLine($"If struggling, press Enter to reset Avatar to starting position, or press \"g\" to give up, {name}.");
+                    continue;
+
                 }
-                
+
 
             }
             Console.Clear();
             Console.WriteLine();
-            foreach (string row in congrats)
+
+            foreach (string row in DrawCongratulations(2))
             {
                 Console.WriteLine(row);
             }
             Console.WriteLine();
-                Console.WriteLine($"    Congratulations {name}, You won!");
+                Console.WriteLine($"               Congratulations {name}, You won!");
             Console.SetCursorPosition(0, 15);
-            Console.WriteLine("Press Enter twice, to close the program");
+            Console.WriteLine("Press Enter, to close the program");
             Console.ReadLine();
         }
-        public static string[] ScrollDimensions(string[] level)
+
+        public static string[] DrawLevel(int levelNumber)
         {
-            var n = 0;
+            
+            if (levelNumber == 1)
+            {
+                string[] level =
+                {
+                    "8888888888   8",
+                    "8        8   8",
+                    "8   888      8",
+                    "8   8     8888",
+                    "8   8888888  8",
+                    "8            8",
+                    "8   8888888888"
+                };
+                return level;
+            }
+            else if (levelNumber == 2)
+            {
+                string[] level =
+                {
+                    "888888888888888888888888888888888888888888888888888888888888888888888   8",
+                    "8   8               8               8           8                   8   8",
+                    "8   8   888888888   8   88888   888888888   88888   88888   88888   8   8",
+                    "8               8       8   8           8           8   8   8       8   8",
+                    "888888888   8   888888888   888888888   88888   8   8   8   888888888   8",
+                    "8       8   8               8           8   8   8   8   8           8   8",
+                    "8   8   8888888888888   8   8   888888888   88888   8   888888888   8   8",
+                    "8   8               8   8   8       8           8           8       8   8",
+                    "8   8888888888888   88888   88888   8   88888   888888888   8   88888   8",
+                    "8           8       8   8       8   8       8           8   8           8",
+                    "8   88888   88888   8   88888   8   888888888   8   8   8   8888888888888",
+                    "8       8       8   8   8       8       8       8   8   8       8       8",
+                    "8888888888888   8   8   8   888888888   8   88888   8   88888   88888   8",
+                    "8           8   8           8       8   8       8   8       8           8",
+                    "8   88888   8   888888888   88888   8   88888   88888   8888888888888   8",
+                    "8   8       8           8           8       8   8   8               8   8",
+                    "8   8   888888888   8   88888   888888888   8   8   8888888888888   8   8",
+                    "8   8           8   8   8   8   8           8               8   8       8",
+                    "8   888888888   8   8   8   88888   888888888   888888888   8   888888888",
+                    "8   8       8   8   8           8           8   8       8               8",
+                    "8   8   88888   88888   88888   888888888   88888   a   888888888   8   8",
+                    "8   8                   8           8               8               8   8",
+                    "8   888888888888888888888888888888888888888888888888888888888888888888888"
+
+                };
+                return level;
+
+
+            }
+            else if (levelNumber == 3)
+            {
+                string[] level =
+                {
+                    "888888888888888888888888888888888888888888888888888888888888888888888   8",
+                    "8   8               8                    8                   8      8   8",
+                    "8   8   888888888   8   88888   88 88888   88888   88888   8        8   8",
+                    "8               8       8   8           8    88888   88888   8 888888   8",
+                    "8       8   8               8           8   8   8   8   8           8   8",
+                    "8   8   8888888888888   8   8   88   8   888888888   888888888          8",
+                    "8   8               8   8   8       8           8           8       8   8",
+                    "8   8888888888888   88888   88888   8   88888   888888888   8   88888   8",
+                    "8           8       8   8       8          8   8                        8",
+                    "8   88888   88888   8   88888   8   888888888   8   8   8   8888888888888",
+                    "8       8       8   8   8       8       8       8   8   8       8       8",
+                    "8888888888888   8   8   8   888888888   8       8   8       8           8",
+                    "8   88888   8   888888888   88888   8   88888   88888   8888888888888   8",
+                    "8   8       8           8   888888888   8888888888888   8           88888",
+                    "8   8           8   8   8   88               8   8       88888888       8",
+                    "8   888888888   8   8   8   88888   888888888   888888888   8   888888888",
+                    "8   888888888888888888888888888888888888888888888888888888888888888888888"
+
+                };
+                return level;
+
+            }
+            else
+            {
+                string[] congrats =
+                {
+                    @"                                                888            
+                                               888            
+                                               888            
+ .d8888b .d88b. 88888b.  .d88b. 888d888 8888b. 888888.d8888b  
+d88P""   d88""""88b888 ""88bd88P""88b888P""      ""88b888   88K      
+888     888  888888  888888  888888    .d888888888   ""Y8888b. 
+Y88b.   Y88..88P888  888Y88b 888888    888  888Y88b.      X88 
+ ""Y8888P ""Y88P"" 888  888 ""Y88888888    ""Y888888 ""Y888 88888P' 
+                             888                              
+                        Y8b d88P                              
+                         ""Y88P"" 
+
+                      YOU WON THE GAME "
+                };
+                return congrats;
+            }
+        }
+
+        public static string[] DrawCongratulations(int version)
+        {
+            if (version == 1)
+            {
+                string[] congrats =
+                {
+                    @"                                 _       
+                                | |      
+  ___ ___  _ __   __ _ _ __ __ _| |_ ___ 
+ / __/ _ \| '_ \ / _` | '__/ _` | __/ __|
+| (_| (_) | | | | (_| | | | (_| | |_\__ \
+ \___\___/|_| |_|\__, |_|  \__,_|\__|___/
+                  __/ |                  
+                 |___/      "
+                };
+                return congrats;
+            }
+            else
+            {
+                string[] congrats =
+                {
+                    @"                                                888            
+                                               888            
+                                               888            
+ .d8888b .d88b. 88888b.  .d88b. 888d888 8888b. 888888.d8888b  
+d88P""   d88""""88b888 ""88bd88P""88b888P""      ""88b888   88K      
+888     888  888888  888888  888888    .d888888888   ""Y8888b. 
+Y88b.   Y88..88P888  888Y88b 888888    888  888Y88b.      X88 
+ ""Y8888P ""Y88P"" 888  888 ""Y88888888    ""Y888888 ""Y888 88888P' 
+                             888                              
+                        Y8b d88P                              
+                         ""Y88P""                               "
+                };
+                return congrats;
+            }
+            
+
+
+            
+        }
+        public static bool LevelCompleted(int playerRow, int playerColumn , string[]level)
+        {
+            if (playerRow == 0 && playerColumn >= level[playerRow].Length - 4 &&
+                playerColumn <= level[playerRow].Length - 1)
+            {
+                return true;
+            }
+            else return false;
+        }
+        private static bool DrawUnregularScrollRow(int i,int multiplier,string[] level)
+        {
+            
+            if (i >= 0 && i <= multiplier
+                || i >= 2 * multiplier && i <= 3 * multiplier
+                || i >= 4 * multiplier && i <= 5 * multiplier
+                || i >= 6 * multiplier && i <= 7 * multiplier
+                || i >= 8 * multiplier && i <= 9 * multiplier
+                || i >= 10 * multiplier && i <= 11 * multiplier
+                || i >= (level[0].Length) + 5 && i <= (level[0].Length + 8))
+            {
+                return true;
+            }
+            else return false;
+
+        }
+
+        public static string[] DrawScrollBody(string[] level)
+        {
+            var unregularLineMultiplier = 0;
             if (level[0].Length < 30)
             {
-                n += 3;
+                unregularLineMultiplier += 3;
             }
-            else n += 9;
+            else unregularLineMultiplier += 9;
 
             var scroll1 = "";
             for (int i = 0; i < level[0].Length + 8; i++)
@@ -224,13 +409,7 @@ namespace Green
             var scroll2 = "";
             for (int i = 0; i < level[0].Length + 8; i++)
             {
-                if (i >= 0 && i <= n
-                    || i >= 2 * n && i <= 3 * n
-                    || i >= 4 * n && i <= 5 * n
-                    || i >= 6 * n && i <= 7 * n
-                    || i >= 8 * n && i <= 9 * n
-                    || i >= 10 * n && i <= 11 * n
-                    || i >= (level[0].Length)+5 && i <=(level[0].Length+8))
+                if (DrawUnregularScrollRow(i, unregularLineMultiplier, level))
                 {
                     scroll2 += "_";
                 }
@@ -249,16 +428,11 @@ namespace Green
             var scroll4 = "";
             for (int i = 0; i < level[0].Length + 8; i++)
             {
-                //var n = 7;
-                if (i >= (level[0].Length) + 5 && i <= (level[0].Length)+8)
+                if (i >= 0 && i <= 4 || i >= (level[0].Length) + 5 && i <= (level[0].Length)+8)
                 {
                     scroll4 += "_";
                 }
-                else if ( i >= 2 * n && i <= 3 * n
-                    || i >= 4 * n && i <= 5 * n
-                    || i >= 6 * n && i <= 7 * n
-                    || i >= 8 * n && i <= 9 * n
-                    || i >= 10 * n && i <= 11 * n)
+                else if (DrawUnregularScrollRow(i, unregularLineMultiplier, level))
                 {
                     scroll4 += " ";
                 }
