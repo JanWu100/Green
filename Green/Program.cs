@@ -33,16 +33,6 @@ namespace Green
             Console.WriteLine($"Welcome to Green, {name} from {place}!");
             Console.WriteLine("Press any key to continue");
             Console.ReadKey(true);
-            //string[] level = {
-            //  "##########",
-            //  "#     #  #",
-            //  "#    ##  #",
-            //  "#     #  #",
-            //  "#        #",
-            //  "#     #   ",
-            //  "##########"
-
-            //};
 
             string[] scrollStart = {
             "    _",
@@ -118,27 +108,26 @@ namespace Green
                 int targetColumn = playerColumn;
                 int targetRow = playerRow;
 
-                if (keyInfo.Key == ConsoleKey.LeftArrow && currentRow[playerColumn-1] != '8')
+                if (keyInfo.Key == ConsoleKey.LeftArrow)
                 {
                     targetColumn = playerColumn-1;
                 }
-                else if (keyInfo.Key == ConsoleKey.RightArrow && currentRow[playerColumn+1] != '8')
+                else if (keyInfo.Key == ConsoleKey.RightArrow)
                 {
                     targetColumn = playerColumn+1;
                 }
-                else if (keyInfo.Key == ConsoleKey.UpArrow && currentRowUp[playerColumn] != '8')
+                else if (keyInfo.Key == ConsoleKey.UpArrow)
                 {
                     targetRow = playerRow-1;
                 }
-                else if (keyInfo.Key == ConsoleKey.DownArrow && currentRowDown[playerColumn] != '8')
+                else if (keyInfo.Key == ConsoleKey.DownArrow)
                 {
                     targetRow = playerRow+1;
                 }
                 // Resetting position
                 else if (keyInfo.Key == ConsoleKey.G)
                 {
-                    //targetColumn = 2;
-                    //targetRow = level.Length - 2;
+
                     targetColumn = DrawLevel(currentLevel)[playerRow].Length - 3;
                     targetRow = 2;
                 }
@@ -148,11 +137,11 @@ namespace Green
                     targetRow = DrawLevel(currentLevel).Length - 2;
                 }
 
-                if (targetColumn >= 0 && targetColumn < DrawLevel(currentLevel)[playerRow].Length)
+                if (targetColumn >= 0 && targetColumn < DrawLevel(currentLevel)[playerRow].Length && DrawLevel(currentLevel)[playerRow][targetColumn] != '8')
                 {
                     playerColumn = targetColumn;
                 }
-                if (targetRow >= 0 && targetRow < DrawLevel(currentLevel).Length-1)
+                if (targetRow >= 0 && targetRow < DrawLevel(currentLevel).Length-1 && DrawLevel(currentLevel)[targetRow][playerColumn] != '8')
                 {
                     playerRow = targetRow;
                 }
@@ -307,19 +296,7 @@ namespace Green
             {
                 string[] congrats =
                 {
-                    @"                                                888            
-                                               888            
-                                               888            
- .d8888b .d88b. 88888b.  .d88b. 888d888 8888b. 888888.d8888b  
-d88P""   d88""""88b888 ""88bd88P""88b888P""      ""88b888   88K      
-888     888  888888  888888  888888    .d888888888   ""Y8888b. 
-Y88b.   Y88..88P888  888Y88b 888888    888  888Y88b.      X88 
- ""Y8888P ""Y88P"" 888  888 ""Y88888888    ""Y888888 ""Y888 88888P' 
-                             888                              
-                        Y8b d88P                              
-                         ""Y88P"" 
-
-                      YOU WON THE GAME "
+                    @"YOU WON THE GAME"
                 };
                 return congrats;
             }
