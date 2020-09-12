@@ -93,39 +93,38 @@ namespace Green
                 int targetColumn = playerColumn;
                 int targetRow = playerRow;
 
-                if (keyInfo.Key == ConsoleKey.LeftArrow && currentRow[playerColumn-1] != '#')
+                if (keyInfo.Key == ConsoleKey.LeftArrow)
                 {
                     targetColumn = playerColumn-1;
                 }
-                else if (keyInfo.Key == ConsoleKey.RightArrow && currentRow[playerColumn+1] != '#')
+                else if (keyInfo.Key == ConsoleKey.RightArrow)
                 {
                     targetColumn = playerColumn+1;
                 }
-                else if (keyInfo.Key == ConsoleKey.UpArrow && currentRow[playerColumn] != '#')
+                else if (keyInfo.Key == ConsoleKey.UpArrow)
                 {
                     targetRow = playerRow-1;
                 }
-                else if (keyInfo.Key == ConsoleKey.DownArrow && currentRow[playerColumn] != '#')
+                else if (keyInfo.Key == ConsoleKey.DownArrow)
                 {
                     targetRow = playerRow+1;
                 }
-                // Resetting position
-                else if (keyInfo.Key == ConsoleKey.Enter)
+                else
                 {
-                    targetColumn = 2;
-                    targetRow = 3;
+                    break;
                 }
 
-                if (targetColumn >= 0 && targetColumn < level[playerRow].Length)
+                if (targetColumn >= 0 && targetColumn < level[playerRow].Length && level[playerRow][targetColumn] != '#')
                 {
                     playerColumn = targetColumn;
                 }
-                if (targetRow >= 0 && targetRow < level.Length)
+                if (targetRow >= 0 && targetRow < level.Length && level[targetRow][playerColumn] != '#')
                 {
                     playerRow = targetRow;
                 }
             }
             Console.SetCursorPosition(0, level.Length);
+            
         }
     }
 }
