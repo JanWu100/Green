@@ -9,7 +9,7 @@ namespace Green
     {
         static void Main(string[] args)
         {
-            // Player creation
+            // Player creations
             
             Console.WriteLine("What is your name, Friend?");
             string name = Console.ReadLine();
