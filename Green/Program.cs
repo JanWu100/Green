@@ -92,8 +92,10 @@ namespace Green
                     break;
                 }
                 Console.SetCursorPosition(playerColumn, playerRow);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("@");
-              
+                Console.ForegroundColor = ConsoleColor.White;
+
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 Console.SetCursorPosition(playerColumn, playerRow);
                 string currentRow = DrawLevel(currentLevel)[playerRow];
